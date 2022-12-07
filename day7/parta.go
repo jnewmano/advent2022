@@ -11,36 +11,137 @@ import (
 )
 
 func a() {
-	s := ``
+	s := `$ cd /
+$ ls
+dir a
+14848514 b.txt
+8504156 c.dat
+dir d
+$ cd a
+$ ls
+dir e
+29116 f
+2557 g
+62596 h.lst
+$ cd e
+$ ls
+584 i
+$ cd ..
+$ cd ..
+$ cd d
+$ ls
+4060174 j
+8033020 d.log
+5626152 d.ext
+7214296 k`
 	s = ``
 
 	things := loadInput(s)
 	list := process(things)
 
-	fmt.Println("sum of list :", m.Sum(list))
-	fmt.Println("high in list:", m.High(list))
-	fmt.Println("low in list :", m.Low(list))
-	fmt.Println("len of list :", len(list))
+	_ = sizes(&list)
 
+	fmt.Println(grandTotal)
+}
+
+var grandTotal int
+var dirSizes []int
+
+func sizes(dir *Dir) int {
+	var total int
+	for _, v := range dir.Things {
+		switch tt := v.(type) {
+		case *Dir:
+			total += sizes(tt)
+		case *File:
+			total += tt.Size
+		default:
+			log.Fatalf("unhandled type of thing [%T]\n", dir.Things)
+		}
+	}
+
+	if total <= 100000 {
+		grandTotal += total
+	}
+	dirSizes = append(dirSizes, total)
+
+	return total
 }
 
 func loadInput(s string) []string {
 	if s != "" {
 		input.SetRaw(s)
 	}
-	// var things = input.Load()
-	// var things = input.LoadSliceSliceString("")
 	return input.LoadSliceString("")
 }
 
-func process(things []string) []int {
+type Dir struct {
+	Name   string
+	Things map[string]interface{}
+	Parent *Dir
+}
 
-	list := []int{}
-	for _, v := range things {
-		fmt.Println(v)
+type File struct {
+	Name string
+	Size int
+}
+
+func process(things []string) Dir {
+
+	root := &Dir{
+		Name:   "root",
+		Things: make(map[string]interface{}),
+		Parent: nil,
 	}
 
-	return list
+	current := root
+
+	for _, v := range things {
+		if strings.HasPrefix(v, "$ cd") {
+			// check to see if we have a directory for it
+			target := strings.TrimPrefix(v, "$ cd ")
+			switch target {
+			case "/":
+				current = root
+			case "..":
+				current = current.Parent
+			default:
+				if _, ok := current.Things[target]; ok {
+					current = current.Things[target].(*Dir)
+				} else {
+					new := Dir{
+						Name:   target,
+						Things: make(map[string]interface{}),
+						Parent: current,
+					}
+					current.Things[target] = new
+					current = &new
+				}
+			}
+
+		} else if strings.HasPrefix(v, "$ ls") {
+		} else {
+			// assume we're listing files
+			if strings.HasPrefix(v, "dir") {
+				dn := strings.TrimPrefix(v, "dir ")
+				new := &Dir{
+					Name:   dn,
+					Things: make(map[string]interface{}),
+					Parent: current,
+				}
+				current.Things[dn] = new
+			} else {
+				size, fn, _ := strings.Cut(v, " ")
+				file := &File{
+					Size: m.Int(size),
+					Name: fn,
+				}
+				current.Things[fn] = file
+			}
+		}
+	}
+
+	return *root
 }
 
 func main() {
