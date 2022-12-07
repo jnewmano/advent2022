@@ -1,0 +1,13 @@
+#!/bin/bash
+
+set -e
+
+go build -v -o day
+
+echo "https://adventofcode.com/2022/"
+
+export PART=$1
+export E=$2
+./day
+
+rm day
