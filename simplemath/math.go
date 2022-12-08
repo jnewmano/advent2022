@@ -8,6 +8,8 @@ import (
 // Int converts a things into an int
 func Int(in any) int {
 	switch v := in.(type) {
+	case uint8:
+		return int(v) - '0'
 	case int:
 		return v
 	case int64:

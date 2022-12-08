@@ -1,0 +1,11 @@
+#!/bin/bash
+
+set -e
+
+go build -v -o day
+
+export PART=$1
+export E=$2
+./day
+
+rm day
