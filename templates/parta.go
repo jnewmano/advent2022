@@ -10,6 +10,9 @@ import (
 	m "github.com/jnewmano/advent2021/simplemath"
 )
 
+// To run, use ./r a f
+// change f to t to use example input file
+// a to b to run part b
 func a() {
 	s := ``
 	s = ``
