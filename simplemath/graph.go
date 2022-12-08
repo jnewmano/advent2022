@@ -8,7 +8,10 @@ type Point struct {
 // default type for map, usually wrapped in another type to track additional information about the node
 type Node struct {
 	Point Point
+	Value int
+	Meta  map[string]interface{}
 
+	// fields used for graph algorithms
 	Counter int
 	Touched bool
 }
