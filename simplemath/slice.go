@@ -32,3 +32,13 @@ func IntSlice(in any) []int {
 		panic(fmt.Errorf("unhandled type %T", in))
 	}
 }
+
+// BinStringToInt converts a binary string to an integer
+// example: "101" -> 5
+func BinStringToInt(s []byte) int {
+	n := 0
+	for _, v := range s {
+		n = n<<1 + Int(v)
+	}
+	return n
+}

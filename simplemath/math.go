@@ -8,7 +8,10 @@ import (
 // Int converts a things into an int
 func Int(in any) int {
 	switch v := in.(type) {
-	case uint8:
+	case uint8: // assume an ascii character
+		if v < '0' || v > '9' {
+			panic(fmt.Errorf("invalid character %q, unable to convert to int", v))
+		}
 		return int(v) - '0'
 	case int:
 		return v

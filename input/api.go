@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"crypto/sha256"
 	"fmt"
-	"io/ioutil"
 	"log"
 	"os"
 	"os/exec"
@@ -18,7 +17,7 @@ func loadInputFromAPI() {
 
 	day := filepath.Base(path)
 	if !strings.HasPrefix(day, "day") {
-		panic("invalid path, expected day in direction name")
+		log.Fatalln("invalid path, expected day in direction name")
 	}
 
 	day = strings.TrimPrefix(day, "day")
@@ -46,12 +45,12 @@ func checkSHA(output []byte) bool {
 		writeSHA(expectedSHA[:])
 	}
 
-	sha, err := ioutil.ReadFile("input.txt.sha")
+	sha, err := os.ReadFile("input.txt.sha")
 	if err != nil {
 		panic(err)
 	}
 
-	if bytes.Compare(sha, expectedSHA[:]) != 0 {
+	if !bytes.Equal(sha, expectedSHA[:]) {
 		fmt.Printf("got:      %x\n", sha)
 		fmt.Printf("expected: %x\n", expectedSHA)
 		log.Fatal("input.txt sha is different than expected")
@@ -61,7 +60,7 @@ func checkSHA(output []byte) bool {
 }
 
 func writeSHA(sha []byte) {
-	err := ioutil.WriteFile("input.txt.sha", sha, 0444)
+	err := os.WriteFile("input.txt.sha", sha, 0444)
 	if err != nil {
 		log.Fatal(err)
 	}

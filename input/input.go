@@ -1,7 +1,8 @@
 package input
 
 import (
-	"io/ioutil"
+	"fmt"
+	"log"
 	"os"
 	"strconv"
 	"strings"
@@ -20,8 +21,19 @@ func SetRaw(a string) error {
 // Load returns the input file as a string
 func Load() string {
 	fn := "input.txt"
-	useExample, _ := strconv.ParseBool(os.Getenv("E"))
+
+	e := os.Getenv("E")
+	if e == "" {
+		e = "f"
+	}
+
+	useExample, err := strconv.ParseBool(e)
+	if err != nil {
+		log.Fatalln("unable to parse E", err)
+	}
+
 	if useExample {
+		fmt.Println("using example")
 		fn = "example.txt"
 	}
 
@@ -29,12 +41,14 @@ func Load() string {
 		return raw
 	}
 
-	_, err := os.Stat(fn)
+	stat, err := os.Stat(fn)
 	if os.IsNotExist(err) {
 		loadInputFromAPI()
+	} else if stat.Size() == 0 {
+		log.Fatalf("file is empty: %s", fn)
 	}
 
-	all, err := ioutil.ReadFile(fn)
+	all, err := os.ReadFile(fn)
 	if err != nil {
 		panic(err)
 	}
