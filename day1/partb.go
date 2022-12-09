@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 
-	m "github.com/jnewmano/advent2021/simplemath"
+	m "github.com/jnewmano/advent2022/simplemath"
 )
 
 func b() {

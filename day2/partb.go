@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/jnewmano/advent2021/input"
-	m "github.com/jnewmano/advent2021/simplemath"
+	"github.com/jnewmano/advent2022/input"
+	m "github.com/jnewmano/advent2022/simplemath"
 )
 
 func b() {

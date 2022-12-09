@@ -7,7 +7,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/jnewmano/advent2021/simplemath"
+	"github.com/jnewmano/advent2022/simplemath"
 )
 
 var raw string
