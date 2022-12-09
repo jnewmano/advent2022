@@ -27,15 +27,6 @@ func a() {
 
 }
 
-func loadInput(s string) []string {
-	if s != "" {
-		input.SetRaw(s)
-	}
-	// var things = input.Load()
-	// var things = input.LoadSliceSliceString("")
-	return input.LoadSliceString("")
-}
-
 func process(things []string) []int {
 
 	list := []int{}
@@ -44,6 +35,15 @@ func process(things []string) []int {
 	}
 
 	return list
+}
+
+func loadInput(s string) []string {
+	if s != "" {
+		input.SetRaw(s)
+	}
+	// var things = input.Load()
+	// var things = input.LoadSliceSliceString("")
+	return input.LoadSliceString("")
 }
 
 func main() {
