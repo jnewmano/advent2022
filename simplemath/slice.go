@@ -42,3 +42,12 @@ func BinStringToInt(s []byte) int {
 	}
 	return n
 }
+
+// NewSlicePointers creates and initializes a slice of pointers to T
+func NewSlicePointers[T any](len int, cap int) []*T {
+	r := make([]*T, len, cap)
+	for i := range r {
+		r[i] = new(T)
+	}
+	return r
+}

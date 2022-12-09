@@ -24,10 +24,7 @@ func a() {
 }
 
 func process(things [][]string, numberKnots int) map[m.Point]int {
-	knots := make([]*m.Point, numberKnots)
-	for i := range knots {
-		knots[i] = &m.Point{}
-	}
+	knots := m.NewSlicePointers[m.Point](numberKnots, 0)
 
 	var visited = map[m.Point]int{}
 	for _, v := range things {
