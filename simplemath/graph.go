@@ -9,26 +9,35 @@ type Point struct {
 type Node struct {
 	Point Point
 	Value int
-	Meta  map[string]interface{}
 
-	// fields used for graph algorithms
+	// internal fields
 	Counter int
 	Touched bool
 }
 
-func PointNeighbors(p Point) []Point {
-	return []Point{
+func PointNeighbors(p Point, includeDiagonals ...bool) []Point {
+	points := []Point{
 		{X: p.X - 1, Y: p.Y},
 		{X: p.X + 1, Y: p.Y},
 		{X: p.X, Y: p.Y - 1},
 		{X: p.X, Y: p.Y + 1},
 	}
+
+	if len(includeDiagonals) > 0 && includeDiagonals[0] {
+		points = append(points, []Point{
+			{X: p.X - 1, Y: p.Y - 1},
+			{X: p.X - 1, Y: p.Y + 1},
+			{X: p.X + 1, Y: p.Y - 1},
+			{X: p.X + 1, Y: p.Y + 1},
+		}...)
+	}
+	return points
 }
 
-// Neighbors returns the neighbors of a point
-func NodeNeighbors[T any](nodes map[Point]T, p Point) []T {
+// NodeNeighbors returns the neighbors of a point
+func NodeNeighbors[T any](nodes map[Point]T, p Point, includeDiagonals ...bool) []T {
 
-	neighborPoints := PointNeighbors(p)
+	neighborPoints := PointNeighbors(p, includeDiagonals...)
 
 	neighbors := []T{}
 	for _, v := range neighborPoints {
@@ -41,4 +50,33 @@ func NodeNeighbors[T any](nodes map[Point]T, p Point) []T {
 	}
 
 	return neighbors
+}
+
+// GridNeighbors returns the neighbors of a point
+func GridNeighbors[T any](grid [][]T, p Point, includeDiagonals ...bool) []Point {
+
+	points := PointNeighbors(p, includeDiagonals...)
+
+	list := []Point{}
+	for _, p := range points {
+		// filter out the neighors, point neighbors doesn't constrain the neighbors to a grid
+		if p.X < 0 || p.X >= len(grid[0]) || p.Y < 0 || p.Y >= len(grid) {
+			continue
+		}
+		list = append(list, p)
+	}
+
+	return list
+}
+
+func MinPoint(points []*Point) Point {
+	x := Min(points, func(v *Point) int { return v.X })
+	y := Min(points, func(v *Point) int { return v.Y })
+	return Point{X: x, Y: y}
+}
+
+func MaxPoint(points []*Point) Point {
+	x := Max(points, func(v *Point) int { return v.X })
+	y := Max(points, func(v *Point) int { return v.Y })
+	return Point{X: x, Y: y}
 }

@@ -69,3 +69,38 @@ func gcd(a, b int) int {
 	}
 	return a
 }
+
+func Min[T any](list []T, f func(T) int) int {
+	var m int
+	for i, v := range list {
+		if i == 0 {
+			m = f(v)
+		}
+		if f(v) < m {
+			m = f(v)
+		}
+	}
+	return m
+}
+
+func Max[T any](list []T, f func(T) int) int {
+	var m int
+	for i, v := range list {
+		if i == 0 {
+			m = f(v)
+		}
+		if f(v) > m {
+			m = f(v)
+		}
+	}
+	return m
+}
+
+func Contains[T comparable](list []*T, v T) bool {
+	for _, x := range list {
+		if *x == v {
+			return true
+		}
+	}
+	return false
+}
