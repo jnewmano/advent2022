@@ -52,7 +52,7 @@ func NodeNeighbors[T any](nodes map[Point]T, p Point, includeDiagonals ...bool) 
 	return neighbors
 }
 
-// GridNeighbors returns the neighbors of a point
+// GridNeighbors returns the neighbors of a point, constrained to the grid
 func GridNeighbors[T any](grid [][]T, p Point, includeDiagonals ...bool) []Point {
 
 	points := PointNeighbors(p, includeDiagonals...)
