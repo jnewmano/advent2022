@@ -17,6 +17,8 @@ func Int(in any) int {
 		return v
 	case int64:
 		return int(v)
+	case float64:
+		return int(v)
 	case string:
 		r, err := strconv.Atoi(v)
 		if err != nil {

@@ -5,6 +5,11 @@ type Point struct {
 	Y int
 }
 
+// Move returns a new point moved by the given point
+func (p Point) Move(m Point) Point {
+	return Point{X: p.X + m.X, Y: p.Y + m.Y}
+}
+
 // default type for map, usually wrapped in another type to track additional information about the node
 type Node struct {
 	Point Point
@@ -69,14 +74,16 @@ func GridNeighbors[T any](grid [][]T, p Point, includeDiagonals ...bool) []Point
 	return list
 }
 
-func MinPoint(points []*Point) Point {
-	x := Min(points, func(v *Point) int { return v.X })
-	y := Min(points, func(v *Point) int { return v.Y })
+// MinCorner returns a point at minX, minY
+func MinCorner(points ...Point) Point {
+	x := Min(points, func(v Point) int { return v.X })
+	y := Min(points, func(v Point) int { return v.Y })
 	return Point{X: x, Y: y}
 }
 
-func MaxPoint(points []*Point) Point {
-	x := Max(points, func(v *Point) int { return v.X })
-	y := Max(points, func(v *Point) int { return v.Y })
+// MinCorner returns a point at maxX, maxY
+func MaxCorner(points ...Point) Point {
+	x := Max(points, func(v Point) int { return v.X })
+	y := Max(points, func(v Point) int { return v.Y })
 	return Point{X: x, Y: y}
 }
